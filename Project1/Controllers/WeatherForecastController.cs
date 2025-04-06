@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
+using Project1.Database;
+using System.Runtime.CompilerServices;
 
 namespace Project1.Controllers
 {
@@ -13,9 +15,13 @@ namespace Project1.Controllers
 
         private readonly ILogger<WeatherForecastController> _logger;
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
+        private readonly WebAPIDbContext _dbContext;
+
+        public WeatherForecastController(ILogger<WeatherForecastController> logger, WebAPIDbContext dbContext)
         {
             _logger = logger;
+            _dbContext = dbContext;
+
         }
 
         [HttpGet(Name = "GetWeatherForecast")]

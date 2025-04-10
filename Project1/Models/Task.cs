@@ -10,6 +10,6 @@ namespace Project1.Models
 
         public int TaskGroupId { get; set; }
         [JsonIgnore]
-        public TaskGroup TaskGroup { get; set; }
+        public TaskGroup? TaskGroup { get; set; }
     }
 }

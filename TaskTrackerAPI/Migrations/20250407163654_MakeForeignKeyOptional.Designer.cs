@@ -4,15 +4,15 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Project1.Database;
+using TaskTrackerAPI.Database;
 
 #nullable disable
 
-namespace Project1.Migrations
+namespace TaskTrackerAPI.Migrations
 {
     [DbContext(typeof(WebAPIDbContext))]
-    [Migration("20250407143257_AddTaskGroupEntity")]
-    partial class AddTaskGroupEntity
+    [Migration("20250407163654_MakeForeignKeyOptional")]
+    partial class MakeForeignKeyOptional
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,7 +24,7 @@ namespace Project1.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Project1.Models.Task", b =>
+            modelBuilder.Entity("TaskTrackerAPI.Models.Task", b =>
                 {
                     b.Property<int>("TaskId")
                         .ValueGeneratedOnAdd()
@@ -49,7 +49,7 @@ namespace Project1.Migrations
                     b.ToTable("Tasks");
                 });
 
-            modelBuilder.Entity("Project1.Models.TaskGroup", b =>
+            modelBuilder.Entity("TaskTrackerAPI.Models.TaskGroup", b =>
                 {
                     b.Property<int>("TaskGroupId")
                         .ValueGeneratedOnAdd()
@@ -57,23 +57,25 @@ namespace Project1.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TaskGroupId"));
 
+                    b.Property<string>("TaskGroupDescription")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("TaskGroupId");
 
                     b.ToTable("TaskGroups");
                 });
 
-            modelBuilder.Entity("Project1.Models.Task", b =>
+            modelBuilder.Entity("TaskTrackerAPI.Models.Task", b =>
                 {
-                    b.HasOne("Project1.Models.TaskGroup", "TaskGroup")
+                    b.HasOne("TaskTrackerAPI.Models.TaskGroup", "TaskGroup")
                         .WithMany("Tasks")
-                        .HasForeignKey("TaskGroupId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("TaskGroupId");
 
                     b.Navigation("TaskGroup");
                 });
 
-            modelBuilder.Entity("Project1.Models.TaskGroup", b =>
+            modelBuilder.Entity("TaskTrackerAPI.Models.TaskGroup", b =>
                 {
                     b.Navigation("Tasks");
                 });

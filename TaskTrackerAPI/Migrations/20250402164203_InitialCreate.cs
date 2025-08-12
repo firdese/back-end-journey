@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace Project1.Migrations
+namespace TaskTrackerAPI.Migrations
 {
     /// <inheritdoc />
     public partial class InitialCreate : Migration

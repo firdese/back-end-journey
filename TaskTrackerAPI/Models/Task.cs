@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace Project1.Models
+namespace TaskTrackerAPI.Models
 {
     public class Task
     {

@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Project1.Database;
+using TaskTrackerAPI.Database;
 
 #nullable disable
 
-namespace Project1.Migrations
+namespace TaskTrackerAPI.Migrations
 {
     [DbContext(typeof(WebAPIDbContext))]
     [Migration("20250402164846_ChangedDBSetToUseModelTaskInsteadOfThreadingTaskStupidMistake")]
@@ -24,7 +24,7 @@ namespace Project1.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Project1.Models.Task", b =>
+            modelBuilder.Entity("TaskTrackerAPI.Models.Task", b =>
                 {
                     b.Property<int>("TaskId")
                         .ValueGeneratedOnAdd()

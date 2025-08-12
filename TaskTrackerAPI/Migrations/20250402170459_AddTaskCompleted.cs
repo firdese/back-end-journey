@@ -2,28 +2,28 @@
 
 #nullable disable
 
-namespace Project1.Migrations
+namespace TaskTrackerAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class TaskGroupProperties : Migration
+    public partial class AddTaskCompleted : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<string>(
-                name: "TaskGroupDescription",
-                table: "TaskGroups",
-                type: "nvarchar(max)",
+            migrationBuilder.AddColumn<bool>(
+                name: "TaskCompleted",
+                table: "Tasks",
+                type: "bit",
                 nullable: false,
-                defaultValue: "");
+                defaultValue: false);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "TaskGroupDescription",
-                table: "TaskGroups");
+                name: "TaskCompleted",
+                table: "Tasks");
         }
     }
 }

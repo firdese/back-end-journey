@@ -1,4 +1,4 @@
-﻿namespace Project1.Models
+﻿namespace TaskTrackerAPI.Models
 {
     public class TaskGroup
     {

@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Project1.Database;
+using TaskTrackerAPI.Database;
 
-namespace Project1.Controllers
+namespace TaskTrackerAPI.Controllers
 {
     [ApiController]
     [Route("tasks")]

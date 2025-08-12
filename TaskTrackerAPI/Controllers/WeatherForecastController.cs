@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
-using Project1.Database;
 using System.Runtime.CompilerServices;
+using TaskTrackerAPI.Database;
 
-namespace Project1.Controllers
+namespace TaskTrackerAPI.Controllers
 {
     [ApiController]
     [Route("[controller]")]

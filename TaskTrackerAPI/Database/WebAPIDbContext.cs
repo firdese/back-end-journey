@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TaskTrackerAPI.Models;
+using Task = TaskTrackerAPI.Models.Task;
 
 namespace TaskTrackerAPI.Database
 {
@@ -12,6 +13,9 @@ namespace TaskTrackerAPI.Database
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Task>().ToTable("tasks", "public");
+            modelBuilder.Entity<TaskGroup>().ToTable("taskgroups", "public");
+
             modelBuilder.Entity<Models.Task>()
                 .HasOne(e => e.TaskGroup)
                 .WithMany(e => e.Tasks)

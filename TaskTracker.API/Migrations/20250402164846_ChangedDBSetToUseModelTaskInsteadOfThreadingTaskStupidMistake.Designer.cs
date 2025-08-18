@@ -24,7 +24,7 @@ namespace TaskTrackerAPI.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("TaskTrackerAPI.Models.Task", b =>
+            modelBuilder.Entity("TaskTracker.API.Models.Task", b =>
                 {
                     b.Property<int>("TaskId")
                         .ValueGeneratedOnAdd()

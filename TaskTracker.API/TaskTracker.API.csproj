@@ -6,8 +6,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>2469bc2e-38cf-468a-b37d-967a90b48d6b</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-    <AssemblyName>TaskTrackerAPI</AssemblyName>
-    <RootNamespace>TaskTrackerAPI</RootNamespace>
+    <AssemblyName>TaskTracker.API</AssemblyName>
+    <RootNamespace>TaskTracker.API</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

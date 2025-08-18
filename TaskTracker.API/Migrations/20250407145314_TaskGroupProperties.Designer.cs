@@ -11,8 +11,8 @@ using TaskTrackerAPI.Database;
 namespace TaskTrackerAPI.Migrations
 {
     [DbContext(typeof(WebAPIDbContext))]
-    [Migration("20250407143257_AddTaskGroupEntity")]
-    partial class AddTaskGroupEntity
+    [Migration("20250407145314_TaskGroupProperties")]
+    partial class TaskGroupProperties
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,7 +24,7 @@ namespace TaskTrackerAPI.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("TaskTrackerAPI.Models.Task", b =>
+            modelBuilder.Entity("TaskTracker.API.Models.Task", b =>
                 {
                     b.Property<int>("TaskId")
                         .ValueGeneratedOnAdd()
@@ -49,7 +49,7 @@ namespace TaskTrackerAPI.Migrations
                     b.ToTable("Tasks");
                 });
 
-            modelBuilder.Entity("TaskTrackerAPI.Models.TaskGroup", b =>
+            modelBuilder.Entity("TaskTracker.API.Models.TaskGroup", b =>
                 {
                     b.Property<int>("TaskGroupId")
                         .ValueGeneratedOnAdd()
@@ -57,14 +57,18 @@ namespace TaskTrackerAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TaskGroupId"));
 
+                    b.Property<string>("TaskGroupDescription")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("TaskGroupId");
 
                     b.ToTable("TaskGroups");
                 });
 
-            modelBuilder.Entity("TaskTrackerAPI.Models.Task", b =>
+            modelBuilder.Entity("TaskTracker.API.Models.Task", b =>
                 {
-                    b.HasOne("TaskTrackerAPI.Models.TaskGroup", "TaskGroup")
+                    b.HasOne("TaskTracker.API.Models.TaskGroup", "TaskGroup")
                         .WithMany("Tasks")
                         .HasForeignKey("TaskGroupId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -73,7 +77,7 @@ namespace TaskTrackerAPI.Migrations
                     b.Navigation("TaskGroup");
                 });
 
-            modelBuilder.Entity("TaskTrackerAPI.Models.TaskGroup", b =>
+            modelBuilder.Entity("TaskTracker.API.Models.TaskGroup", b =>
                 {
                     b.Navigation("Tasks");
                 });

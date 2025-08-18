@@ -11,8 +11,8 @@ using TaskTrackerAPI.Database;
 namespace TaskTrackerAPI.Migrations
 {
     [DbContext(typeof(WebAPIDbContext))]
-    [Migration("20250402170459_AddTaskCompleted")]
-    partial class AddTaskCompleted
+    [Migration("20250407163654_MakeForeignKeyOptional")]
+    partial class MakeForeignKeyOptional
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,7 +24,7 @@ namespace TaskTrackerAPI.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("TaskTrackerAPI.Models.Task", b =>
+            modelBuilder.Entity("TaskTracker.API.Models.Task", b =>
                 {
                     b.Property<int>("TaskId")
                         .ValueGeneratedOnAdd()
@@ -39,9 +39,45 @@ namespace TaskTrackerAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("TaskGroupId")
+                        .HasColumnType("int");
+
                     b.HasKey("TaskId");
 
+                    b.HasIndex("TaskGroupId");
+
                     b.ToTable("Tasks");
+                });
+
+            modelBuilder.Entity("TaskTracker.API.Models.TaskGroup", b =>
+                {
+                    b.Property<int>("TaskGroupId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TaskGroupId"));
+
+                    b.Property<string>("TaskGroupDescription")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("TaskGroupId");
+
+                    b.ToTable("TaskGroups");
+                });
+
+            modelBuilder.Entity("TaskTracker.API.Models.Task", b =>
+                {
+                    b.HasOne("TaskTracker.API.Models.TaskGroup", "TaskGroup")
+                        .WithMany("Tasks")
+                        .HasForeignKey("TaskGroupId");
+
+                    b.Navigation("TaskGroup");
+                });
+
+            modelBuilder.Entity("TaskTracker.API.Models.TaskGroup", b =>
+                {
+                    b.Navigation("Tasks");
                 });
 #pragma warning restore 612, 618
         }

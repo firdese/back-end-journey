@@ -1,5 +1,9 @@
 using Microsoft.EntityFrameworkCore;
-using TaskTrackerAPI.Database;
+using TaskTracker.Application.Interfaces.Repositories;
+using TaskTracker.Application.Interfaces.Services;
+using TaskTracker.Application.Services;
+using TaskTracker.Infrastructure.Persistence;
+using TaskTracker.Infrastructure.Persistence.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +23,12 @@ builder.Services.AddCors(options =>
 });
 builder.Services.AddDbContext<WebAPIDbContext>(options => 
 options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddScoped<ITaskRepository, TaskRepository>();
+builder.Services.AddScoped<ITaskService, TaskService>();
+builder.Services.AddScoped<ITaskGroupRepository, TaskGroupRepository>();
+builder.Services.AddScoped<ITaskGroupService, TaskGroupService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

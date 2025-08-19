@@ -1,22 +1,22 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using TaskTrackerAPI.Models;
-using Task = TaskTrackerAPI.Models.Task;
+using TaskTracker.Domain.Models;
+using Task = TaskTracker.Domain.Models.Task;
 
-namespace TaskTrackerAPI.Database
+namespace TaskTracker.Infrastructure.Persistence
 {
     public class WebAPIDbContext : DbContext
     {
-        public DbSet<Models.Task> Tasks { get; set; }
-        public DbSet<Models.TaskGroup> TaskGroups { get; set; }
+        public DbSet<Task> Tasks { get; set; }
+        public DbSet<TaskGroup> TaskGroups { get; set; }
 
         public WebAPIDbContext(DbContextOptions options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Task>().ToTable("tasks", "public");
-            modelBuilder.Entity<TaskGroup>().ToTable("taskgroups", "public");
+            modelBuilder.Entity<TaskTracker.Domain.Models.Task>().ToTable("tasks", "public");
+            modelBuilder.Entity<TaskTracker.Domain.Models.TaskGroup>().ToTable("taskgroups", "public");
 
-            modelBuilder.Entity<Models.Task>()
+            modelBuilder.Entity<Task>()
                 .HasOne(e => e.TaskGroup)
                 .WithMany(e => e.Tasks)
                 .HasForeignKey(e => e.TaskGroupId)

@@ -1,57 +1,41 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using TaskTrackerAPI.Database;
+using TaskTracker.Application.Interfaces.Services;
+using TaskTracker.Application.Services;
+using TaskTracker.Domain.Models;
 
-namespace TaskTrackerAPI.Controllers
+namespace TaskTracker.API.Controllers
 {
     [ApiController]
     [Route("taskgroup")]
-    public class TaskGroupController : ControllerBase
+    public class TaskGroupController(ITaskGroupService taskGroupService) : ControllerBase
     {
-        private readonly WebAPIDbContext _dbContext;
-        public TaskGroupController(WebAPIDbContext dbContext)
-        {
-            _dbContext = dbContext;
-        }
-
         [HttpGet]
         public async Task<IActionResult> GetTaskGroups()
         {
-            return Ok(await _dbContext.TaskGroups.Include(tg => tg.Tasks).ToListAsync());
+            return Ok(await taskGroupService.GetTaskGroups());
         }
 
         [HttpPost]
-        public async Task<IActionResult> PostTaskGroups(Models.TaskGroup[] taskGroups)
+        public async Task<IActionResult> PostTaskGroups(TaskGroup[] taskGroups)
         {
-            await _dbContext.TaskGroups.AddRangeAsync(taskGroups);
-            await _dbContext.SaveChangesAsync();
+            await taskGroupService.PostTaskGroups(taskGroups);
 
-            return Ok(taskGroups);
+            return Ok();
         }
 
         [HttpPut]
-        public async Task<IActionResult> PutTaskGroups(Models.TaskGroup[] taskGroups)
+        public async Task<IActionResult> PutTaskGroups(TaskGroup[] taskGroups)
         {
-            await _dbContext.TaskGroups.AddRangeAsync(taskGroups);
-            foreach (var taskGroup in taskGroups)
-            {
-                _dbContext.Entry(taskGroup).State = EntityState.Modified;
-            }
-            await _dbContext.SaveChangesAsync();
+            await  taskGroupService.PutTaskGroups(taskGroups);
 
             return Ok(taskGroups);
         }
 
         [HttpDelete]
-        public async Task<IActionResult> DeleteTaskGroups(Models.TaskGroup[] taskGroups)
+        public async Task<IActionResult> DeleteTaskGroups(TaskGroup[] taskGroups)
         {
-            await _dbContext.TaskGroups.AddRangeAsync(taskGroups);
-            foreach (var taskGroup in taskGroups)
-            {
-                _dbContext.Entry(taskGroup).State = EntityState.Deleted;
-            }
-            await _dbContext.SaveChangesAsync();
+            await taskGroupService.DeleteTaskGroups(taskGroups);
 
             return Ok();
         }

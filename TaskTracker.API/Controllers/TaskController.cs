@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TaskTracker.Application.Interfaces.Services;
 
 namespace TaskTracker.API.Controllers
 {
     [ApiController]
+    [Authorize]
     [Route("tasks")]
     public class TaskController(ITaskService taskService) : ControllerBase
     {

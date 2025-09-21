@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using TaskTracker.Application.Interfaces.Repositories;
 using TaskTracker.Application.Interfaces.Services;
 using TaskTracker.Application.Services;
@@ -28,6 +29,54 @@ builder.Services.AddScoped<ITaskRepository, TaskRepository>();
 builder.Services.AddScoped<ITaskService, TaskService>();
 builder.Services.AddScoped<ITaskGroupRepository, TaskGroupRepository>();
 builder.Services.AddScoped<ITaskGroupService, TaskGroupService>();
+
+builder.Services.AddAuthentication("Bearer")
+    .AddJwtBearer("Bearer", options =>
+    {
+        options.Authority = "http://keycloak:8080/realms/myrealm"; // Keycloak realm URL
+        options.RequireHttpsMetadata = false; // only for dev
+        options.Audience = "account";
+        options.BackchannelHttpHandler = new HttpClientHandler
+        {
+            ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true
+        };
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidIssuers = new[]
+            {
+                "http://localhost:8080/realms/myrealm",
+            }
+        };
+        
+        // Add event handlers
+        options.Events = new Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerEvents
+        {
+            OnAuthenticationFailed = context =>
+            {
+                Console.WriteLine("❌ Authentication failed: " + context.Exception.Message);
+                if (context.Exception.InnerException != null)
+                    Console.WriteLine("   Inner: " + context.Exception.InnerException.Message);
+                return Task.CompletedTask;
+            },
+            OnChallenge = context =>
+            {
+                Console.WriteLine("⚠️ Challenge error: " + context.Error + " - " + context.ErrorDescription);
+                return Task.CompletedTask;
+            },
+            OnTokenValidated = context =>
+            {
+                Console.WriteLine("✅ Token validated successfully");
+                return Task.CompletedTask;
+            },
+            OnMessageReceived = context =>
+            {
+                Console.WriteLine("📩 Token received: " + context.Token);
+                return Task.CompletedTask;
+            }
+        };
+    });
+builder.Services.AddAuthorization();;
+
 
 var app = builder.Build();
 

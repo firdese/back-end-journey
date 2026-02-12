@@ -11,14 +11,17 @@ public class Task
     [Column("taskdescription")]
     public string TaskDescription { get; set; } = string.Empty;
 
-    [Column("taskcreatedatutc")]
-    public DateTime TaskCreatedAtUtc { get; set; }
-
-    [Column("taskupdatedatutc")]
-    public DateTime TaskUpdatedAtUtc { get; set; }
-
     [Column("taskcompletedatutc")]
     public DateTime? TaskCompletedAtUtc { get; set; }
+
+    [Column("taskstartatutc")]
+    public DateTime? TaskStartAtUtc { get; set; }
+
+    [Column("taskendatutc")]
+    public DateTime? TaskEndAtUtc { get; set; }
+
+    [Column("taskprogress")]
+    public int? TaskProgress { get; set; }
 
     [Column("taskdueatutc")]
     public DateTime? TaskDueAtUtc { get; set; }
@@ -34,6 +37,12 @@ public class Task
 
     [Column("taskgroupid")]
     public int TaskGroupId { get; set; }
+
+    [Column("taskcreatedatutc")]
+    public DateTime TaskCreatedAtUtc { get; set; }
+
+    [Column("taskupdatedatutc")]
+    public DateTime TaskUpdatedAtUtc { get; set; }
 
     [JsonIgnore]
     public TaskGroup? TaskGroup { get; set; }

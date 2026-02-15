@@ -44,6 +44,12 @@ public class Task
     [Column("taskupdatedatutc")]
     public DateTime TaskUpdatedAtUtc { get; set; }
 
+    [InverseProperty("Task")]
+    public ICollection<TaskDependency> Dependencies { get; set; } = new List<TaskDependency>();
+
+    [InverseProperty("DependsOnTask")]
+    public ICollection<TaskDependency> DependentOnMe { get; set; } = new List<TaskDependency>();
+
     [JsonIgnore]
     public TaskGroup? TaskGroup { get; set; }
 }

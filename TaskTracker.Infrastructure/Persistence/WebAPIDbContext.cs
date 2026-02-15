@@ -22,6 +22,25 @@ namespace TaskTracker.Infrastructure.Persistence
                 .HasForeignKey(e => e.TaskGroupId)
                 .IsRequired(false);
 
+            modelBuilder.Entity<TaskDependency>()
+                .HasKey(td => new { td.TaskId, td.DependsOnTaskId });
+
+            modelBuilder.Entity<TaskDependency>()
+                .HasOne(td => td.Task)
+                .WithMany(t => t.Dependencies)
+                .HasForeignKey(td => td.TaskId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<TaskDependency>()
+                .HasOne(td => td.DependsOnTask)
+                .WithMany(t => t.DependentOnMe)
+                .HasForeignKey(td => td.DependsOnTaskId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<TaskDependency>()
+                .HasCheckConstraint("chk_no_self_dependency", "task_id <> depends_on_task_id");
+
+
             base.OnModelCreating(modelBuilder);
         }
 

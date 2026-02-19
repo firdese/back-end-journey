@@ -5,11 +5,11 @@ namespace TaskTracker.Application.Interfaces.Repositories;
 
 public interface ITaskRepository
 {
-    public Task<IEnumerable<ModelTask>> GetTasks();
+    public Task<IEnumerable<ModelTask>> GetTasksByTaskGroup(int taskGroupId);
 
-    public Task CreateTasks(ModelTask[] tasks);
+    public Task<IEnumerable<ModelTask>> CreateTasks(ModelTask[] tasks);
 
-    public Task PutTasks(ModelTask[] tasks);
+    public Task<IEnumerable<ModelTask>> PutTasks(ModelTask[] tasks);
 
-    public Task DeleteTasks(ModelTask[] tasksToDelete);
+    public Task<IEnumerable<int>> DeleteTasks(int[] tasksToDelete);
 }

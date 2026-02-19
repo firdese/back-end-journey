@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using TaskTracker.Domain.Models;
 using Task = TaskTracker.Domain.Models.Task;
 
@@ -20,7 +20,7 @@ namespace TaskTracker.Infrastructure.Persistence
                 .HasOne(e => e.TaskGroup)
                 .WithMany(e => e.Tasks)
                 .HasForeignKey(e => e.TaskGroupId)
-                .IsRequired(false);
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<TaskDependency>()
                 .HasKey(td => new { td.TaskId, td.DependsOnTaskId });

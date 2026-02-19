@@ -12,18 +12,18 @@ public class TaskGroupService(ITaskGroupRepository repository) : ITaskGroupServi
         return await repository.GetTaskGroups();
     }
 
-    public async Task PostTaskGroups(TaskGroup[] taskGroups)
+    public async Task<IEnumerable<TaskGroup>> PostTaskGroups(TaskGroup[] taskGroups)
     { 
-        await repository.PostTaskGroups(taskGroups);
+        return await repository.PostTaskGroups(taskGroups);
     }
 
-    public async Task PutTaskGroups(TaskGroup[] taskGroups)
+    public async Task<IEnumerable<TaskGroup>> PutTaskGroups(TaskGroup[] taskGroups)
     {
-        await repository.PutTaskGroups(taskGroups);
+        return await repository.PutTaskGroups(taskGroups);
     }
 
-    public async Task DeleteTaskGroups(TaskGroup[] taskGroups)
+    public async Task<IEnumerable<int>> DeleteTaskGroups(int[] taskGroupIds)
     {
-        await repository.DeleteTaskGroups(taskGroups);
+        return await repository.DeleteTaskGroups(taskGroupIds);
     }
 }

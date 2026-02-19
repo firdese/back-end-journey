@@ -8,7 +8,7 @@ Current main project: TaskTracker API
 ## What This Repository Demonstrates
 
 - RESTful API design
-- Clean separation of layers
+- Clean separation of layers (Onion Architecture)
 - Entity modeling & database design
 - Authentication middleware integration
 - Dockerized local development

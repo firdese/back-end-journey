@@ -5,23 +5,23 @@ namespace TaskTracker.Application.Services;
 
 public class TaskService(ITaskRepository taskRepository) : ITaskService
 {
-    public async Task<IEnumerable<Domain.Models.Task>> GetTasks()
+    public async Task<IEnumerable<Domain.Models.Task>> GetTasksByTaskGroup(int taskGroupId)
     {
-        return await taskRepository.GetTasks();
+        return await taskRepository.GetTasksByTaskGroup(taskGroupId);
     }
 
-    public async Task CreateTasks(Domain.Models.Task[] tasks)
+    public async Task<IEnumerable<Domain.Models.Task>> CreateTasks(Domain.Models.Task[] tasks)
     {
-        await taskRepository.CreateTasks(tasks);
+        return await taskRepository.CreateTasks(tasks);
     }
 
-    public async Task PutTasks(Domain.Models.Task[] tasks)
+    public async Task<IEnumerable<Domain.Models.Task>> PutTasks(Domain.Models.Task[] tasks)
     {
-        await taskRepository.PutTasks(tasks);
+        return await taskRepository.PutTasks(tasks);
     }
 
-    public async Task DeleteTasks(Domain.Models.Task[] tasksToDelete)
+    public async Task<IEnumerable<int>> DeleteTasks(int[] tasksToDelete)
     {
-        await taskRepository.DeleteTasks(tasksToDelete);
+        return await taskRepository.DeleteTasks(tasksToDelete);
     }
 }

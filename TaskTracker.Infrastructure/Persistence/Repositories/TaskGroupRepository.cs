@@ -12,29 +12,32 @@ public class TaskGroupRepository(WebAPIDbContext context) : ITaskGroupRepository
         return await context.TaskGroups.Include(tg => tg.Tasks).ToListAsync();
     }
 
-    public async Task PostTaskGroups(TaskGroup[] taskGroups)
-    {
-        await context.TaskGroups.AddRangeAsync(taskGroups);
-        await context.SaveChangesAsync();
-    }
-
-    public async Task PutTaskGroups(TaskGroup[] taskGroups)
-    {
-        await context.TaskGroups.AddRangeAsync(taskGroups);
-        foreach (var taskGroup in taskGroups)
-        {
-            context.Entry(taskGroup).State = EntityState.Modified;
+    public async Task<IEnumerable<TaskGroup>> PostTaskGroups(TaskGroup[] taskGroups) {
+        foreach (var tg in taskGroups) {
+            context.TaskGroups.Add(tg);
         }
         await context.SaveChangesAsync();
+
+        return taskGroups;
     }
 
-    public async Task DeleteTaskGroups(TaskGroup[] taskGroups)
-    {
-        await context.TaskGroups.AddRangeAsync(taskGroups);
-        foreach (var taskGroup in taskGroups)
-        {
-            context.Entry(taskGroup).State = EntityState.Deleted;
+    public async Task<IEnumerable<TaskGroup>> PutTaskGroups(TaskGroup[] taskGroups) {
+        foreach (var tg in taskGroups) {
+            context.TaskGroups.Update(tg);
         }
         await context.SaveChangesAsync();
+
+        return taskGroups;
+    }
+
+    public async Task<IEnumerable<int>> DeleteTaskGroups(int[] taskGroupIds) {
+        var toDelete = context.TaskGroups
+            .Where(tg => taskGroupIds.Contains(tg.TaskGroupId))
+            .ToArray();
+
+        context.TaskGroups.RemoveRange(toDelete);
+        await context.SaveChangesAsync();
+
+        return toDelete.Select(t => t.TaskGroupId).ToArray();
     }
 }

@@ -7,10 +7,10 @@ public interface ITaskGroupRepository
 {
     public Task<IEnumerable<TaskGroup>> GetTaskGroups();
 
-    public Task PostTaskGroups(TaskGroup[] taskGroups);
+    public Task<IEnumerable<TaskGroup>> PostTaskGroups(TaskGroup[] taskGroups);
 
-    public Task PutTaskGroups(TaskGroup[] taskGroups);
+    public Task<IEnumerable<TaskGroup>> PutTaskGroups(TaskGroup[] taskGroups);
 
-    public Task DeleteTaskGroups(TaskGroup[] taskGroups);
+    public Task<IEnumerable<int>> DeleteTaskGroups(int[] taskGroupIds);
 
 }

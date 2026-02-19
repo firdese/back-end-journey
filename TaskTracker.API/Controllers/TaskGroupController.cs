@@ -1,43 +1,37 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc;
 using TaskTracker.Application.Interfaces.Services;
-using TaskTracker.Application.Services;
 using TaskTracker.Domain.Models;
 
-namespace TaskTracker.API.Controllers
-{
-    [ApiController]
-    [Route("taskgroup")]
-    public class TaskGroupController(ITaskGroupService taskGroupService) : ControllerBase
-    {
-        [HttpGet]
-        public async Task<IActionResult> GetTaskGroups()
-        {
-            return Ok(await taskGroupService.GetTaskGroups());
-        }
+[ApiController]
+[Route("taskgroup")]
+public class TaskGroupController : ControllerBase {
+    private readonly ITaskGroupService _taskGroupService;
 
-        [HttpPost]
-        public async Task<IActionResult> PostTaskGroups(TaskGroup[] taskGroups)
-        {
-            await taskGroupService.PostTaskGroups(taskGroups);
+    public TaskGroupController(ITaskGroupService taskGroupService) {
+        _taskGroupService = taskGroupService;
+    }
 
-            return Ok();
-        }
+    [HttpGet]
+    public async Task<IActionResult> GetTaskGroups() {
+        var result = await _taskGroupService.GetTaskGroups();
+        return Ok(result);
+    }
 
-        [HttpPut]
-        public async Task<IActionResult> PutTaskGroups(TaskGroup[] taskGroups)
-        {
-            await  taskGroupService.PutTaskGroups(taskGroups);
+    [HttpPost]
+    public async Task<IActionResult> PostTaskGroups(TaskGroup[] taskGroups) {
+        var created = await _taskGroupService.PostTaskGroups(taskGroups);
+        return Ok(created);
+    }
 
-            return Ok(taskGroups);
-        }
+    [HttpPut]
+    public async Task<IActionResult> PutTaskGroups(TaskGroup[] taskGroups) {
+        var updated = await _taskGroupService.PutTaskGroups(taskGroups);
+        return Ok(updated);
+    }
 
-        [HttpDelete]
-        public async Task<IActionResult> DeleteTaskGroups(TaskGroup[] taskGroups)
-        {
-            await taskGroupService.DeleteTaskGroups(taskGroups);
-
-            return Ok();
-        }
+    [HttpDelete]
+    public async Task<IActionResult> DeleteTaskGroups(int[] taskGroupIds) {
+        var deletedIds = await _taskGroupService.DeleteTaskGroups(taskGroupIds);
+        return Ok(deletedIds);
     }
 }

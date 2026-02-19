@@ -3,8 +3,6 @@ services:
     build:
       context: .
       dockerfile: TaskTracker.API/Dockerfile
-    ports:
-      - "5000:8080"
     depends_on:
       - db
     environment:
@@ -17,8 +15,6 @@ services:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_DB}
-    ports:
-      - "5432:5432"
     volumes:
       - db-data:/var/lib/postgresql/data
 
@@ -28,8 +24,6 @@ services:
       POSTGRES_DB: ${KEYCLOAK_DB}
       POSTGRES_USER: ${KEYCLOAK_USER}
       POSTGRES_PASSWORD: ${KEYCLOAK_PASSWORD}
-    ports:
-      - "5433:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
@@ -44,11 +38,11 @@ services:
       KC_DB_URL_DATABASE: ${KEYCLOAK_DB}
       KC_DB_USERNAME: ${KEYCLOAK_USER}
       KC_DB_PASSWORD: ${KEYCLOAK_PASSWORD}
-    ports:
-      - "8080:8080"
     depends_on:
       - keycloak-db
 
 volumes:
   db-data:
+      name: back-end-journey_db-data
   postgres_data:
+      name: back-end-journey_postgres_data

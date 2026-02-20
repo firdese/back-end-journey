@@ -15,6 +15,7 @@ namespace TaskTracker.Infrastructure.Persistence
         {
             modelBuilder.Entity<TaskTracker.Domain.Models.Task>().ToTable("tasks", "public");
             modelBuilder.Entity<TaskTracker.Domain.Models.TaskGroup>().ToTable("taskgroups", "public");
+            modelBuilder.Entity<TaskTracker.Domain.Models.TaskDependency>().ToTable("taskdependencies", "public");
 
             modelBuilder.Entity<Task>()
                 .HasOne(e => e.TaskGroup)
@@ -38,8 +39,8 @@ namespace TaskTracker.Infrastructure.Persistence
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<TaskDependency>()
-                .HasCheckConstraint("chk_no_self_dependency", "task_id <> depends_on_task_id");
-
+                .HasCheckConstraint("chk_no_self_dependency",
+                    "\"TaskId\" <> \"DependsOnTaskId\"");
 
             base.OnModelCreating(modelBuilder);
         }

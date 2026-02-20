@@ -43,6 +43,6 @@ services:
 
 volumes:
   db-data:
-      name: back-end-journey_db-data
+      name: back-end-journey_db-data-ef
   postgres_data:
       name: back-end-journey_postgres_data

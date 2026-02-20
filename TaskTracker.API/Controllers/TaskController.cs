@@ -19,7 +19,7 @@ namespace TaskTracker.API.Controllers {
         public async Task<IActionResult> GetTasks(int taskGroupId) {
             var tasks = await _taskService.GetTasksByTaskGroup(taskGroupId);
             return Ok(tasks);
-        }
+        } 
 
         [HttpPost]
         public async Task<IActionResult> PostTasks(Task[] tasks) {

@@ -1,8 +1,10 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using TaskTracker.Application.Dtos;
 using TaskTracker.Application.Interfaces.Services;
-using TaskTracker.Domain.Models;
 
 [ApiController]
+[Authorize]
 [Route("taskgroup")]
 public class TaskGroupController : ControllerBase {
     private readonly ITaskGroupService _taskGroupService;
@@ -18,13 +20,13 @@ public class TaskGroupController : ControllerBase {
     }
 
     [HttpPost]
-    public async Task<IActionResult> PostTaskGroups(TaskGroup[] taskGroups) {
+    public async Task<IActionResult> PostTaskGroups(TaskGroupRequestDto[] taskGroups) {
         var created = await _taskGroupService.PostTaskGroups(taskGroups);
         return Ok(created);
     }
 
     [HttpPut]
-    public async Task<IActionResult> PutTaskGroups(TaskGroup[] taskGroups) {
+    public async Task<IActionResult> PutTaskGroups(TaskGroupRequestDto[] taskGroups) {
         var updated = await _taskGroupService.PutTaskGroups(taskGroups);
         return Ok(updated);
     }

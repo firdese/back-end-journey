@@ -7,9 +7,9 @@ namespace TaskTracker.Infrastructure.Persistence.Repositories;
 
 public class TaskGroupRepository(WebAPIDbContext context) : ITaskGroupRepository
 {
-    public async Task<IEnumerable<TaskGroup>> GetTaskGroups()
+    public async Task<IEnumerable<TaskGroup>> GetTaskGroupsByOwner(string ownerId)
     {
-        return await context.TaskGroups.Include(tg => tg.Tasks).ToListAsync();
+        return await context.TaskGroups.Include(tg => tg.Tasks).Where(x => x.OwnerUserId == ownerId).ToListAsync();
     }
 
     public async Task<IEnumerable<TaskGroup>> PostTaskGroups(TaskGroup[] taskGroups) {

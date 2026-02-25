@@ -5,7 +5,7 @@ namespace TaskTracker.Application.Interfaces.Repositories;
 
 public interface ITaskGroupRepository
 {
-    public Task<IEnumerable<TaskGroup>> GetTaskGroups();
+    public Task<IEnumerable<TaskGroup>> GetTaskGroupsByOwner(string ownerId);
 
     public Task<IEnumerable<TaskGroup>> PostTaskGroups(TaskGroup[] taskGroups);
 

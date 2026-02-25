@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TaskTracker.Infrastructure.Persistence;
@@ -11,9 +12,11 @@ using TaskTracker.Infrastructure.Persistence;
 namespace TaskTracker.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(WebAPIDbContext))]
-    partial class WebAPIDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260220231414_AddOwnerUserIdToTaskGroup")]
+    partial class AddOwnerUserIdToTaskGroup
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

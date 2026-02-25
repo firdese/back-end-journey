@@ -1,16 +1,16 @@
-using TaskTracker.Domain.Models;
-using Task = System.Threading.Tasks.Task;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using TaskTracker.Application.Dtos;
 
 namespace TaskTracker.Application.Interfaces.Services;
 
 public interface ITaskGroupService
 {
-    public Task<IEnumerable<TaskGroup>> GetTaskGroups();
+    Task<IEnumerable<TaskGroupResponseDto>> GetTaskGroups();
 
-    public Task<IEnumerable<TaskGroup>> PostTaskGroups(TaskGroup[] taskGroups);
+    Task<IEnumerable<TaskGroupResponseDto>> PostTaskGroups(TaskGroupRequestDto[] taskGroups);
 
-    public Task<IEnumerable<TaskGroup>> PutTaskGroups(TaskGroup[] taskGroups);
+    Task<IEnumerable<TaskGroupResponseDto>> PutTaskGroups(TaskGroupRequestDto[] taskGroups);
 
-    public Task<IEnumerable<int>> DeleteTaskGroups(int[] taskGroupIds);
-
+    Task<int[]> DeleteTaskGroups(int[] taskGroupIds);
 }

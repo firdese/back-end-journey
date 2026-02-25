@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TaskTracker.Domain.Models;
@@ -24,6 +25,11 @@ public class TaskGroup
 
     [Column("taskgroupsortorder")]
     public int TaskGroupSortOrder { get; set; }
+
+    [Column("userid")]
+    [Required]
+    [MaxLength(100)]
+    public string OwnerUserId { get; set; } = default!;
 
     public ICollection<Task>? Tasks { get; set; }
 }

@@ -1,9 +1,8 @@
-# Backend Journey
+# TaskTracker Backend (ASP.NET Core)
 
-This repository contains backend-focused projects and architectural
-experiments using ASP.NET Core.
+This repository hosts development of TaskTracker API using ASP.NET Core.
 
-Current main project: TaskTracker API
+Current main project: 
 
 ## What This Repository Demonstrates
 
@@ -44,14 +43,5 @@ POST /tasks
 PUT /tasks/{id}
 DELETE /tasks/{id}
 
-
-## Roadmap
-
-- [ ] Add integration tests
-- [ ] Implement global exception middleware
-- [ ] Add CI pipeline
-- [ ] Add cloud deployment version
-- [ ] Refactor toward Clean Architecture
-
 Frontend repository:
-https://github.com/firdese/front-end-journey
+https://github.com/firdese/tasktracker-frontend-angular

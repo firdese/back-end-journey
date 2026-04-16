@@ -36,21 +36,23 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddAuthentication("Bearer")
     .AddJwtBearer("Bearer", options =>
     {
-        options.Authority = "http://keycloak:8080/realms/myrealm"; // Keycloak realm URL
-        options.RequireHttpsMetadata = false; // only for dev
-        options.Audience = "account";
-        options.BackchannelHttpHandler = new HttpClientHandler
-        {
-            ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true
+        // Read values from configuration. Fallback to original hard-coded value when not present.
+        var authority = builder.Configuration.GetValue<string>("Authentication:Authority")
+                        ?? builder.Configuration.GetValue<string>("Jwt:Authority")
+                        ?? "https://itmxzxiuzmikmhannqia.supabase.co/auth/v1";
+
+        var validIssuer = builder.Configuration.GetValue<string>("Authentication:ValidIssuer")
+                         ?? builder.Configuration.GetValue<string>("Jwt:ValidIssuer")
+                         ?? authority;
+
+        options.Authority = authority;
+
+        options.TokenValidationParameters = new TokenValidationParameters {
+            ValidIssuer = validIssuer,
+            ValidateIssuer = true,
+            ValidateAudience = false
         };
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidIssuers = new[]
-            {
-                "http://localhost:8080/realms/myrealm",
-            }
-        };
-        
+
         // Add event handlers
         options.Events = new Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerEvents
         {

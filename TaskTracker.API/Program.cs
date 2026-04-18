@@ -22,6 +22,8 @@ builder.Services.AddCors(options =>
             policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
         });
 });
+var test = builder.Configuration.GetConnectionString("DefaultConnection");
+Console.WriteLine("DB TEST => " + test);
 builder.Services.AddDbContext<WebAPIDbContext>(options => 
 options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 

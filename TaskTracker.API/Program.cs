@@ -24,8 +24,8 @@ builder.Services.AddCors(options =>
 });
 var test = builder.Configuration.GetConnectionString("DefaultConnection");
 Console.WriteLine("DB TEST => " + test);
-//builder.Services.AddDbContext<WebAPIDbContext>(options => 
-//options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddDbContext<WebAPIDbContext>(options =>
+options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddScoped<ITaskRepository, TaskRepository>();
 builder.Services.AddScoped<ITaskService, TaskService>();
@@ -87,15 +87,15 @@ builder.Services.AddAuthorization();;
 
 var app = builder.Build();
 
-//using (var scope = app.Services.CreateScope()) {
-//    try {
-//        var db = scope.ServiceProvider.GetRequiredService<WebAPIDbContext>();
-//        db.Database.Migrate();
-//    }
-//    catch (Exception ex) {
-//        Console.WriteLine("Migration failed: " + ex.Message);
-//    }
-//}
+using (var scope = app.Services.CreateScope()) {
+    try {
+        var db = scope.ServiceProvider.GetRequiredService<WebAPIDbContext>();
+        db.Database.Migrate();
+    }
+    catch (Exception ex) {
+        Console.WriteLine("Migration failed: " + ex.Message);
+    }
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

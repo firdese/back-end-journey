@@ -1,23 +1,52 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using AutoMapper;
+using TaskTracker.Application.Dtos.Task;
 using TaskTracker.Application.Interfaces.Repositories;
 using TaskTracker.Application.Interfaces.Services;
+using TaskTracker.Domain.Models;
 
 namespace TaskTracker.Application.Services;
 
-public class TaskService(ITaskRepository taskRepository) : ITaskService
+public class TaskService(
+    ITaskRepository taskRepository,
+    IMapper mapper) : ITaskService
 {
-    public async Task<IEnumerable<Domain.Models.Task>> GetTasksByTaskGroup(int taskGroupId)
+    public async Task<IEnumerable<TaskResponseDto>> GetTasksByTaskGroup(int taskGroupId)
     {
-        return await taskRepository.GetTasksByTaskGroup(taskGroupId);
+        var tasks = await taskRepository.GetTasksByTaskGroup(taskGroupId);
+        var response = mapper.Map<IEnumerable<TaskResponseDto>>(tasks);
+        return response;
     }
 
-    public async Task<IEnumerable<Domain.Models.Task>> CreateTasks(Domain.Models.Task[] tasks)
+    public async Task<IEnumerable<TaskResponseDto>> CreateTasks(TaskRequestDto[] tasks)
     {
-        return await taskRepository.CreateTasks(tasks);
+        var domain = mapper.Map<Domain.Models.Task[]>(tasks);
+
+        foreach (var t in domain)
+        {
+            t.TaskCreatedAtUtc = DateTime.UtcNow;
+        }
+
+        var createdTasks = await taskRepository.CreateTasks(domain);
+        var response = mapper.Map<IEnumerable<TaskResponseDto>>(createdTasks);
+        return response;
     }
 
-    public async Task<IEnumerable<Domain.Models.Task>> PutTasks(Domain.Models.Task[] tasks)
+    public async Task<IEnumerable<TaskResponseDto>> PutTasks(TaskRequestDto[] tasks)
     {
-        return await taskRepository.PutTasks(tasks);
+        var domain = mapper.Map<Domain.Models.Task[]>(tasks);
+
+        foreach (var t in domain)
+        {
+            t.TaskUpdatedAtUtc = DateTime.UtcNow;
+        }
+
+        var updatedTasks = await taskRepository.PutTasks(domain);
+        var response = mapper.Map<IEnumerable<TaskResponseDto>>(updatedTasks);
+        return response;
     }
 
     public async Task<IEnumerable<int>> DeleteTasks(int[] tasksToDelete)

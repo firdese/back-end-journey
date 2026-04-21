@@ -1,4 +1,6 @@
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using TaskTracker.Application.Interfaces.Repositories;
 using TaskTracker.Application.Interfaces.Services;
@@ -14,16 +16,12 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddCors(options =>
-{
+builder.Services.AddCors(options => {
     options.AddPolicy("AllowAll",
-        policy =>
-        {
+        policy => {
             policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
         });
 });
-var test = builder.Configuration.GetConnectionString("DefaultConnection");
-Console.WriteLine("DB TEST => " + test);
 builder.Services.AddDbContext<WebAPIDbContext>(options =>
 options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
@@ -35,71 +33,54 @@ builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 
 builder.Services.AddHttpContextAccessor();
 
+// Register AutoMapper - scans assemblies for Profile classes
+builder.Services.AddAutoMapper(typeof(TaskTracker.Application.Mapping.MappingProfile));
+
 builder.Services.AddAuthentication("Bearer")
-    .AddJwtBearer("Bearer", options =>
-    {
-        // Read values from configuration. Fallback to original hard-coded value when not present.
-        var authority = builder.Configuration.GetValue<string>("Authentication:Authority")
-                        ?? builder.Configuration.GetValue<string>("Jwt:Authority")
-                        ?? "https://itmxzxiuzmikmhannqia.supabase.co/auth/v1";
-
-        var validIssuer = builder.Configuration.GetValue<string>("Authentication:ValidIssuer")
-                         ?? builder.Configuration.GetValue<string>("Jwt:ValidIssuer")
-                         ?? authority;
-
-        options.Authority = authority;
+    .AddJwtBearer("Bearer", options => {
+        options.Authority = builder.Configuration.GetValue<string>("Authentication:Authority");
 
         options.TokenValidationParameters = new TokenValidationParameters {
-            ValidIssuer = validIssuer,
+            ValidIssuer = builder.Configuration.GetValue<string>("Authentication:ValidIssuer")
+                            ?? options.Authority,
             ValidateIssuer = true,
             ValidateAudience = false
         };
 
         // Add event handlers
-        options.Events = new Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerEvents
-        {
-            OnAuthenticationFailed = context =>
-            {
+        options.Events = new Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerEvents {
+            OnAuthenticationFailed = context => {
                 Console.WriteLine("❌ Authentication failed: " + context.Exception.Message);
                 if (context.Exception.InnerException != null)
                     Console.WriteLine("   Inner: " + context.Exception.InnerException.Message);
                 return Task.CompletedTask;
             },
-            OnChallenge = context =>
-            {
+            OnChallenge = context => {
                 Console.WriteLine("⚠️ Challenge error: " + context.Error + " - " + context.ErrorDescription);
                 return Task.CompletedTask;
             },
-            OnTokenValidated = context =>
-            {
+            OnTokenValidated = context => {
                 Console.WriteLine("✅ Token validated successfully");
                 return Task.CompletedTask;
             },
-            OnMessageReceived = context =>
-            {
+            OnMessageReceived = context => {
                 Console.WriteLine("📩 Token received: " + context.Token);
                 return Task.CompletedTask;
             }
         };
     });
-builder.Services.AddAuthorization();;
+builder.Services.AddAuthorization(); ;
 
 
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope()) {
-    try {
-        var db = scope.ServiceProvider.GetRequiredService<WebAPIDbContext>();
-        db.Database.Migrate();
-    }
-    catch (Exception ex) {
-        Console.WriteLine("Migration failed: " + ex.Message);
-    }
+    var db = scope.ServiceProvider.GetRequiredService<WebAPIDbContext>();
+    db.Database.Migrate();
 }
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
+if (app.Environment.IsDevelopment()) {
     app.UseSwagger();
     app.UseSwaggerUI();
 }

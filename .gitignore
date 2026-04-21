@@ -485,3 +485,4 @@ $RECYCLE.BIN/
 # Local settings files
 /TaskTracker.API/appsettings.Development.json
 /TaskTracker.API/appsettings.Docker.json
+/TaskTracker.API/appsettings.Development.json

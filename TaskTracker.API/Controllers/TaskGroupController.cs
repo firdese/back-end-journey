@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TaskTracker.Application.Dtos;
+using TaskTracker.Application.Dtos.TaskGroup;
 using TaskTracker.Application.Interfaces.Services;
 
 [ApiController]

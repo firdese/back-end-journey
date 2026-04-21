@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using TaskTracker.Application.Dtos;
+using TaskTracker.Application.Dtos.TaskGroup;
 
 namespace TaskTracker.Application.Interfaces.Services;
 

@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using TaskTracker.Application.Dtos.Task;
 using TaskTracker.Application.Interfaces.Services;
 using TaskTracker.Domain.Models;
 using Task = TaskTracker.Domain.Models.Task;
@@ -22,13 +23,13 @@ namespace TaskTracker.API.Controllers {
         } 
 
         [HttpPost]
-        public async Task<IActionResult> PostTasks(Task[] tasks) {
+        public async Task<IActionResult> PostTasks(TaskRequestDto[] tasks) {
             var createdTasks = await _taskService.CreateTasks(tasks);
             return Ok(createdTasks);
         }
 
         [HttpPut]
-        public async Task<IActionResult> PutTasks(Task[] tasks) {
+        public async Task<IActionResult> PutTasks(TaskRequestDto[] tasks) {
             var updatedTasks = await _taskService.PutTasks(tasks);
             return Ok(updatedTasks);
         }

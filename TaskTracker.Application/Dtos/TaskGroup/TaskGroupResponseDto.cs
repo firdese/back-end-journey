@@ -1,6 +1,6 @@
 using System;
 
-namespace TaskTracker.Application.Dtos;
+namespace TaskTracker.Application.Dtos.TaskGroup;
 
 public sealed class TaskGroupResponseDto
 {

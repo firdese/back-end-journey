@@ -2,6 +2,7 @@ using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using TaskTracker.API.Filters;
 using TaskTracker.Application.Interfaces.Repositories;
 using TaskTracker.Application.Interfaces.Services;
 using TaskTracker.Application.Services;
@@ -12,7 +13,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add<ApiExceptionFilter>();
+});
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -34,7 +38,7 @@ builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 builder.Services.AddHttpContextAccessor();
 
 // Register AutoMapper - scans assemblies for Profile classes
-builder.Services.AddAutoMapper(typeof(TaskTracker.Application.Mapping.MappingProfile));
+builder.Services.AddAutoMapper(_ => { }, typeof(TaskTracker.Application.Mapping.MappingProfile));
 
 builder.Services.AddAuthentication("Bearer")
     .AddJwtBearer("Bearer", options => {

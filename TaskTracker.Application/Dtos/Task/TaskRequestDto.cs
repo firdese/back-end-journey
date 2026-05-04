@@ -1,27 +1,62 @@
-using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace TaskTracker.Application.Dtos.Task;
 
-public class TaskRequestDto
+public class CreateTaskRequestDto
 {
-    // Id is optional for creates; clients may send 0 or omit
-    public int TaskId { get; set; }
+    [Required]
+    [StringLength(500, MinimumLength = 1)]
+    public string TaskDescription { get; set; } = string.Empty;
 
-    public string? TaskTitle { get; set; }
-
-    public string? TaskDescription { get; set; }
-
-    // Foreign key to task group
-    public int? TaskGroupId { get; set; }
-
-    // Scheduling / lifecycle
-    public DateTime? TaskDueAtUtc { get; set; }
+    [Range(1, int.MaxValue)]
+    public int TaskGroupId { get; set; }
 
     public DateTime? TaskCompletedAtUtc { get; set; }
 
-    // Domain-level priority (1..N)
-    public int? TaskPriority { get; set; }
+    public DateTime? TaskStartAtUtc { get; set; }
 
-    // Any other client-supplied flags (example)
-    public bool? TaskIsArchived { get; set; }
+    public DateTime? TaskEndAtUtc { get; set; }
+
+    [Range(0, 100)]
+    public int? TaskProgress { get; set; }
+
+    public DateTime? TaskDueAtUtc { get; set; }
+
+    [Range(0, int.MaxValue)]
+    public int TaskSortOrder { get; set; }
+
+    [Range(0, short.MaxValue)]
+    public short TaskPriority { get; set; }
+}
+
+public class UpdateTaskRequestDto
+{
+    [Range(1, int.MaxValue)]
+    public int TaskId { get; set; }
+
+    [Required]
+    [StringLength(500, MinimumLength = 1)]
+    public string TaskDescription { get; set; } = string.Empty;
+
+    [Range(1, int.MaxValue)]
+    public int TaskGroupId { get; set; }
+
+    public DateTime? TaskCompletedAtUtc { get; set; }
+
+    public DateTime? TaskStartAtUtc { get; set; }
+
+    public DateTime? TaskEndAtUtc { get; set; }
+
+    [Range(0, 100)]
+    public int? TaskProgress { get; set; }
+
+    public DateTime? TaskDueAtUtc { get; set; }
+
+    public DateTime? TaskDeletedAtUtc { get; set; }
+
+    [Range(0, int.MaxValue)]
+    public int TaskSortOrder { get; set; }
+
+    [Range(0, short.MaxValue)]
+    public short TaskPriority { get; set; }
 }

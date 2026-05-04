@@ -6,27 +6,27 @@ public class TaskResponseDto
 {
     public int TaskId { get; set; }
 
-    public string? TaskTitle { get; set; }
-
-    public string? TaskDescription { get; set; }
-
-    public int? TaskGroupId { get; set; }
-
-    public int? TaskPriority { get; set; }
-
-    public bool TaskIsArchived { get; set; }
-
-    // Timestamps
-    public DateTime? TaskCreatedAtUtc { get; set; }
-
-    public DateTime? TaskUpdatedAtUtc { get; set; }
-
-    public DateTime? TaskArchivedAtUtc { get; set; }
-
-    public DateTime? TaskDueAtUtc { get; set; }
+    public string TaskDescription { get; set; } = string.Empty;
 
     public DateTime? TaskCompletedAtUtc { get; set; }
 
-    // Owner info (optional)
-    public string? OwnerUserId { get; set; }
+    public DateTime? TaskStartAtUtc { get; set; }
+
+    public DateTime? TaskEndAtUtc { get; set; }
+
+    public int? TaskProgress { get; set; }
+
+    public DateTime? TaskDueAtUtc { get; set; }
+
+    public DateTime? TaskDeletedAtUtc { get; set; }
+
+    public int TaskSortOrder { get; set; }
+
+    public short TaskPriority { get; set; }
+
+    public int TaskGroupId { get; set; }
+
+    public DateTime TaskCreatedAtUtc { get; set; }
+
+    public DateTime TaskUpdatedAtUtc { get; set; }
 }

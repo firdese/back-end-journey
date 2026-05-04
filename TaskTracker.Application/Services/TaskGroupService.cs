@@ -23,15 +23,16 @@ public class TaskGroupService(
         return response;
     }
 
-    public async Task<IEnumerable<TaskGroupResponseDto>> PostTaskGroups(TaskGroupRequestDto[] taskGroups)
+    public async Task<IEnumerable<TaskGroupResponseDto>> PostTaskGroups(CreateTaskGroupRequestDto[] taskGroups)
     {
         var ownerId = currentUserService.UserId;
         var domain = mapper.Map<TaskGroup[]>(taskGroups);
+        var now = DateTime.UtcNow;
 
-        // set created timestamp and owner explicitly
         foreach (var g in domain)
         {
-            g.TaskGroupCreatedAtUtc = DateTime.UtcNow;
+            g.TaskGroupCreatedAtUtc = now;
+            g.TaskGroupUpdatedAtUtc = now;
             g.OwnerUserId = ownerId;
         }
 
@@ -40,27 +41,27 @@ public class TaskGroupService(
         return response;
     }
 
-    public async Task<IEnumerable<TaskGroupResponseDto>> PutTaskGroups(TaskGroupRequestDto[] taskGroups)
+    public async Task<IEnumerable<TaskGroupResponseDto>> PutTaskGroups(UpdateTaskGroupRequestDto[] taskGroups)
     {
         var ownerId = currentUserService.UserId;
         var domain = mapper.Map<TaskGroup[]>(taskGroups);
+        var now = DateTime.UtcNow;
 
-        // set updated timestamp and owner explicitly
         foreach (var g in domain)
         {
-            g.TaskGroupUpdatedAtUtc = DateTime.UtcNow;
+            g.TaskGroupUpdatedAtUtc = now;
             g.OwnerUserId = ownerId;
         }
 
-        var updated = await taskGroupRepository.PutTaskGroups(domain);
+        var updated = await taskGroupRepository.PutTaskGroups(domain, ownerId);
         var response = mapper.Map<IEnumerable<TaskGroupResponseDto>>(updated);
         return response;
     }
 
     public async Task<int[]> DeleteTaskGroups(int[] taskGroupIds)
     {
-        // TODO soft delete via archived at utc
-        var deleted = await taskGroupRepository.DeleteTaskGroups(taskGroupIds);
+        var ownerId = currentUserService.UserId;
+        var deleted = await taskGroupRepository.DeleteTaskGroups(taskGroupIds, ownerId);
         return deleted.ToArray();
     }
 }

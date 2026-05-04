@@ -37,11 +37,20 @@ docker compose up --build
 
 ## API Endpoints
 
-GET /task-groups
-GET /task-groups/{id}/tasks
+All API endpoints require a bearer token. Request bodies use DTO contracts instead of domain entities.
+
+GET /taskgroup
+POST /taskgroup
+PUT /taskgroup
+DELETE /taskgroup
+GET /tasks?taskGroupId={id}
 POST /tasks
-PUT /tasks/{id}
-DELETE /tasks/{id}
+PUT /tasks
+DELETE /tasks
+
+Create task requests include client-owned fields such as `taskDescription`,
+`taskGroupId`, `taskProgress`, `taskSortOrder`, and `taskPriority`. Response
+DTOs include server-managed fields such as IDs and UTC timestamps.
 
 Frontend repository:
 https://github.com/firdese/tasktracker-frontend-angular

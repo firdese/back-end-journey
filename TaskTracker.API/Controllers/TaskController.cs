@@ -2,8 +2,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TaskTracker.Application.Dtos.Task;
 using TaskTracker.Application.Interfaces.Services;
-using TaskTracker.Domain.Models;
-using Task = TaskTracker.Domain.Models.Task;
 
 namespace TaskTracker.API.Controllers {
     [ApiController]
@@ -23,19 +21,19 @@ namespace TaskTracker.API.Controllers {
         } 
 
         [HttpPost]
-        public async Task<IActionResult> PostTasks(TaskRequestDto[] tasks) {
+        public async Task<IActionResult> PostTasks([FromBody] CreateTaskRequestDto[] tasks) {
             var createdTasks = await _taskService.CreateTasks(tasks);
             return Ok(createdTasks);
         }
 
         [HttpPut]
-        public async Task<IActionResult> PutTasks(TaskRequestDto[] tasks) {
+        public async Task<IActionResult> PutTasks([FromBody] UpdateTaskRequestDto[] tasks) {
             var updatedTasks = await _taskService.PutTasks(tasks);
             return Ok(updatedTasks);
         }
 
         [HttpDelete]
-        public async Task<IActionResult> DeleteTasks(int[] taskIds) {
+        public async Task<IActionResult> DeleteTasks([FromBody] int[] taskIds) {
             var deletedIds = await _taskService.DeleteTasks(taskIds);
             return Ok(deletedIds);
         }

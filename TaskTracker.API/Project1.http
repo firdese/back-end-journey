@@ -1,6 +1,82 @@
 @Project1_HostAddress = http://localhost:5250
+@Token = replace-with-jwt
 
-GET {{Project1_HostAddress}}/weatherforecast/
+GET {{Project1_HostAddress}}/taskgroup
 Accept: application/json
+Authorization: Bearer {{Token}}
 
 ###
+
+POST {{Project1_HostAddress}}/taskgroup
+Content-Type: application/json
+Authorization: Bearer {{Token}}
+
+[
+  {
+    "taskGroupDescription": "Today",
+    "taskGroupColor": "#336699",
+    "taskGroupSortOrder": 0
+  }
+]
+
+###
+
+PUT {{Project1_HostAddress}}/taskgroup
+Content-Type: application/json
+Authorization: Bearer {{Token}}
+
+[
+  {
+    "taskGroupId": 1,
+    "taskGroupDescription": "Today",
+    "taskGroupColor": "#336699",
+    "taskGroupSortOrder": 0
+  }
+]
+
+###
+
+GET {{Project1_HostAddress}}/tasks?taskGroupId=1
+Accept: application/json
+Authorization: Bearer {{Token}}
+
+###
+
+POST {{Project1_HostAddress}}/tasks
+Content-Type: application/json
+Authorization: Bearer {{Token}}
+
+[
+  {
+    "taskDescription": "Refactor API to DTO contracts",
+    "taskGroupId": 1,
+    "taskProgress": 0,
+    "taskSortOrder": 0,
+    "taskPriority": 1
+  }
+]
+
+###
+
+PUT {{Project1_HostAddress}}/tasks
+Content-Type: application/json
+Authorization: Bearer {{Token}}
+
+[
+  {
+    "taskId": 1,
+    "taskDescription": "Refactor API to DTO contracts",
+    "taskGroupId": 1,
+    "taskProgress": 50,
+    "taskSortOrder": 0,
+    "taskPriority": 1
+  }
+]
+
+###
+
+DELETE {{Project1_HostAddress}}/tasks
+Content-Type: application/json
+Authorization: Bearer {{Token}}
+
+[1]

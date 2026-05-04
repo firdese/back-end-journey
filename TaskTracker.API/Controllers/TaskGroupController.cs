@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using TaskTracker.Application.Dtos;
 using TaskTracker.Application.Dtos.TaskGroup;
 using TaskTracker.Application.Interfaces.Services;
 
@@ -21,19 +20,19 @@ public class TaskGroupController : ControllerBase {
     }
 
     [HttpPost]
-    public async Task<IActionResult> PostTaskGroups(TaskGroupRequestDto[] taskGroups) {
+    public async Task<IActionResult> PostTaskGroups([FromBody] CreateTaskGroupRequestDto[] taskGroups) {
         var created = await _taskGroupService.PostTaskGroups(taskGroups);
         return Ok(created);
     }
 
     [HttpPut]
-    public async Task<IActionResult> PutTaskGroups(TaskGroupRequestDto[] taskGroups) {
+    public async Task<IActionResult> PutTaskGroups([FromBody] UpdateTaskGroupRequestDto[] taskGroups) {
         var updated = await _taskGroupService.PutTaskGroups(taskGroups);
         return Ok(updated);
     }
 
     [HttpDelete]
-    public async Task<IActionResult> DeleteTaskGroups(int[] taskGroupIds) {
+    public async Task<IActionResult> DeleteTaskGroups([FromBody] int[] taskGroupIds) {
         var deletedIds = await _taskGroupService.DeleteTaskGroups(taskGroupIds);
         return Ok(deletedIds);
     }

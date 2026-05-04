@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using TaskTracker.Application.Exceptions;
 using TaskTracker.Application.Interfaces.Repositories;
 using TaskTracker.Domain.Models;
 using Task = System.Threading.Tasks.Task;
@@ -21,19 +22,36 @@ public class TaskGroupRepository(WebAPIDbContext context) : ITaskGroupRepository
         return taskGroups;
     }
 
-    public async Task<IEnumerable<TaskGroup>> PutTaskGroups(TaskGroup[] taskGroups) {
+    public async Task<IEnumerable<TaskGroup>> PutTaskGroups(TaskGroup[] taskGroups, string ownerId) {
+        var taskGroupIds = taskGroups.Select(tg => tg.TaskGroupId).Distinct().ToArray();
+        var existingTaskGroups = await context.TaskGroups
+            .Where(tg => taskGroupIds.Contains(tg.TaskGroupId) && tg.OwnerUserId == ownerId)
+            .ToArrayAsync();
+
+        if (existingTaskGroups.Length != taskGroupIds.Length) {
+            throw new ForbiddenResourceAccessException("One or more task groups are not accessible.");
+        }
+
         foreach (var tg in taskGroups) {
-            context.TaskGroups.Update(tg);
+            var existing = existingTaskGroups.Single(x => x.TaskGroupId == tg.TaskGroupId);
+            existing.TaskGroupDescription = tg.TaskGroupDescription;
+            existing.TaskGroupColor = tg.TaskGroupColor;
+            existing.TaskGroupSortOrder = tg.TaskGroupSortOrder;
+            existing.TaskGroupUpdatedAtUtc = tg.TaskGroupUpdatedAtUtc;
         }
         await context.SaveChangesAsync();
 
-        return taskGroups;
+        return existingTaskGroups;
     }
 
-    public async Task<IEnumerable<int>> DeleteTaskGroups(int[] taskGroupIds) {
-        var toDelete = context.TaskGroups
-            .Where(tg => taskGroupIds.Contains(tg.TaskGroupId))
-            .ToArray();
+    public async Task<IEnumerable<int>> DeleteTaskGroups(int[] taskGroupIds, string ownerId) {
+        var toDelete = await context.TaskGroups
+            .Where(tg => taskGroupIds.Contains(tg.TaskGroupId) && tg.OwnerUserId == ownerId)
+            .ToArrayAsync();
+
+        if (toDelete.Length != taskGroupIds.Distinct().Count()) {
+            throw new ForbiddenResourceAccessException("One or more task groups are not accessible.");
+        }
 
         context.TaskGroups.RemoveRange(toDelete);
         await context.SaveChangesAsync();

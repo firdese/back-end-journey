@@ -38,13 +38,17 @@ docker compose up --build
 By default, Docker Compose starts only the API. The API expects database and
 authentication services to come from its active configuration.
 
-To run the API with local PostgreSQL and Keycloak containers, use the `local`
-profile and local override file:
+To run the API with local PostgreSQL, Keycloak, and LocalStack S3 containers,
+use the `local` profile and local override file:
 
 docker compose --profile local -f docker-compose.yml -f docker-compose.override.yml -f docker-compose.local.yml up --build
 
 Set `KEYCLOAK_REALM` in `.env` to match the realm used by the frontend and
 backend token validation config.
+
+LocalStack exposes S3 on `http://localhost:4566` from the host and
+`http://localstack:4566` from other Compose services. Set `S3_BUCKET_NAME` in
+`.env` to choose the bucket created on startup.
 
 ## API Endpoints
 

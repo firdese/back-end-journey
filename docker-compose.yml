@@ -44,8 +44,22 @@ services:
     depends_on:
       - keycloak-db
 
+  localstack:
+    image: localstack/localstack:3
+    profiles:
+      - local
+    environment:
+      SERVICES: s3
+      AWS_DEFAULT_REGION: ${AWS_REGION:-us-east-1}
+      S3_BUCKET_NAME: ${S3_BUCKET_NAME:-tasktracker-local}
+    volumes:
+      - localstack-data:/var/lib/localstack
+      - ./localstack/init-s3.sh:/etc/localstack/init/ready.d/init-s3.sh:ro
+
 volumes:
   db-data:
       name: back-end-journey_db-data-ef
   postgres_data:
       name: back-end-journey_postgres_data
+  localstack-data:
+      name: back-end-journey_localstack_data

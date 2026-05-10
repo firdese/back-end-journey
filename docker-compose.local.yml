@@ -3,8 +3,14 @@ services:
     depends_on:
       - db
       - keycloak
+      - localstack
     environment:
       ConnectionStrings__DefaultConnection: Host=db;Port=5432;Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}
       Authentication__Authority: http://keycloak:8080/realms/${KEYCLOAK_REALM:-myrealm}
       Authentication__ValidIssuer: http://localhost:8080/realms/${KEYCLOAK_REALM:-myrealm}
       Authentication__RequireHttpsMetadata: "false"
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID:-test}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY:-test}
+      AWS_REGION: ${AWS_REGION:-us-east-1}
+      AWS__ServiceUrl: http://localstack:4566
+      AWS__S3__BucketName: ${S3_BUCKET_NAME:-tasktracker-local}

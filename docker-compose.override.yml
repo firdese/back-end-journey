@@ -52,3 +52,9 @@ services:
       KC_DB_PASSWORD: ${KEYCLOAK_PASSWORD}
     command: start-dev
 
+  localstack:
+    profiles:
+      - local
+    ports:
+      - "4566:4566"
+

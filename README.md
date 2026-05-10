@@ -21,7 +21,7 @@ Current main project:
 - Entity Framework Core
 - PostgreSQL
 - Docker
-- Keycloak (authentication)
+- Keycloak (optional local authentication)
 
 ## Project Structure
 
@@ -34,6 +34,17 @@ docker-compose.yml
 ## Running Locally
 
 docker compose up --build
+
+By default, Docker Compose starts only the API. The API expects database and
+authentication services to come from its active configuration.
+
+To run the API with local PostgreSQL and Keycloak containers, use the `local`
+profile and local override file:
+
+docker compose --profile local -f docker-compose.yml -f docker-compose.override.yml -f docker-compose.local.yml up --build
+
+Set `KEYCLOAK_REALM` in `.env` to match the realm used by the frontend and
+backend token validation config.
 
 ## API Endpoints
 

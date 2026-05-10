@@ -16,11 +16,15 @@ services:
       - ASPNETCORE_HTTPS_PORTS=7190
 
   db:
+    profiles:
+      - local
     ports:
       - "5432:5432"
 
   keycloak-db:
     image: postgres:15
+    profiles:
+      - local
     environment:
         POSTGRES_DB: ${KEYCLOAK_DB}
         POSTGRES_USER: ${KEYCLOAK_USER}
@@ -32,6 +36,8 @@ services:
 
   keycloak:
     image: quay.io/keycloak/keycloak:24.0
+    profiles:
+      - local
     depends_on:
       - keycloak-db
     ports:

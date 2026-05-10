@@ -1,0 +1,10 @@
+services:
+  api:
+    depends_on:
+      - db
+      - keycloak
+    environment:
+      ConnectionStrings__DefaultConnection: Host=db;Port=5432;Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}
+      Authentication__Authority: http://keycloak:8080/realms/${KEYCLOAK_REALM:-myrealm}
+      Authentication__ValidIssuer: http://localhost:8080/realms/${KEYCLOAK_REALM:-myrealm}
+      Authentication__RequireHttpsMetadata: "false"

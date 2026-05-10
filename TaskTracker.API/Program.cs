@@ -43,6 +43,7 @@ builder.Services.AddAutoMapper(_ => { }, typeof(TaskTracker.Application.Mapping.
 builder.Services.AddAuthentication("Bearer")
     .AddJwtBearer("Bearer", options => {
         options.Authority = builder.Configuration.GetValue<string>("Authentication:Authority");
+        options.RequireHttpsMetadata = builder.Configuration.GetValue("Authentication:RequireHttpsMetadata", true);
 
         options.TokenValidationParameters = new TokenValidationParameters {
             ValidIssuer = builder.Configuration.GetValue<string>("Authentication:ValidIssuer")

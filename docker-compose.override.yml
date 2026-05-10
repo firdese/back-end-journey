@@ -3,8 +3,8 @@ version: "3.9"
 services:
   api:
     ports:
-      - "5000:8080"
-      - "5001:8081"
+      - "5250:5250"
+      - "7190:7190"
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
@@ -12,8 +12,8 @@ services:
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_HTTP_PORTS=8080
-      - ASPNETCORE_HTTPS_PORTS=8081
+      - ASPNETCORE_HTTP_PORTS=5250
+      - ASPNETCORE_HTTPS_PORTS=7190
 
   db:
     ports:

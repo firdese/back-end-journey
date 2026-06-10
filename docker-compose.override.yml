@@ -2,6 +2,8 @@ version: "3.9"
 
 services:
   api:
+    depends_on:
+      - localstack
     ports:
       - "5250:5250"
       - "7190:7190"
@@ -14,6 +16,11 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=5250
       - ASPNETCORE_HTTPS_PORTS=7190
+      - AWS_ACCESS_KEY_ID=test
+      - AWS_SECRET_ACCESS_KEY=test
+      - AWS_REGION=us-east-1
+      - AWS__ServiceUrl=http://localstack:4566
+      - AWS__S3__BucketName=tasktracker-local
 
   db:
     profiles:
@@ -53,8 +60,6 @@ services:
     command: start-dev
 
   localstack:
-    profiles:
-      - local
     ports:
       - "4566:4566"
 

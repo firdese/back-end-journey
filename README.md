@@ -63,9 +63,17 @@ POST /tasks
 PUT /tasks
 DELETE /tasks
 
+POST /storage
+GET /storage/{objectKey}
+DELETE /storage/{objectKey}
+
 Create task requests include client-owned fields such as `taskDescription`,
 `taskGroupId`, `taskProgress`, `taskSortOrder`, and `taskPriority`. Response
 DTOs include server-managed fields such as IDs and UTC timestamps.
+
+Storage uploads accept multipart form data with a `file` field. Returned
+`objectKey` values are scoped to the authenticated user and can be used with
+the download and delete storage endpoints.
 
 Frontend repository:
 https://github.com/firdese/tasktracker-frontend-angular

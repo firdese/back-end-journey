@@ -50,6 +50,8 @@ public class Task
     [InverseProperty("DependsOnTask")]
     public ICollection<TaskDependency> DependentOnMe { get; set; } = new List<TaskDependency>();
 
+    public ICollection<TaskAttachment> Attachments { get; set; } = new List<TaskAttachment>();
+
     [JsonIgnore]
     public TaskGroup? TaskGroup { get; set; }
 }

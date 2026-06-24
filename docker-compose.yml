@@ -46,6 +46,8 @@ services:
 
   localstack:
     image: localstack/localstack:3
+    profiles:
+      - local
     environment:
       SERVICES: s3
       AWS_DEFAULT_REGION: ${AWS_REGION:-us-east-1}

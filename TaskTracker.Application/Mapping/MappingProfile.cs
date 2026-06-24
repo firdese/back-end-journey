@@ -1,5 +1,6 @@
 using AutoMapper;
 using TaskTracker.Application.Dtos.Task;
+using TaskTracker.Application.Dtos.TaskAttachment;
 using TaskTracker.Application.Dtos.TaskGroup;
 using TaskTracker.Domain.Models;
 
@@ -18,13 +19,16 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.TaskDeletedAtUtc, opt => opt.Ignore())
             .ForMember(dest => dest.Dependencies, opt => opt.Ignore())
             .ForMember(dest => dest.DependentOnMe, opt => opt.Ignore())
+            .ForMember(dest => dest.Attachments, opt => opt.Ignore())
             .ForMember(dest => dest.TaskGroup, opt => opt.Ignore());
         CreateMap<UpdateTaskRequestDto, Domain.Models.Task>()
             .ForMember(dest => dest.TaskCreatedAtUtc, opt => opt.Ignore())
             .ForMember(dest => dest.TaskUpdatedAtUtc, opt => opt.Ignore())
             .ForMember(dest => dest.Dependencies, opt => opt.Ignore())
             .ForMember(dest => dest.DependentOnMe, opt => opt.Ignore())
+            .ForMember(dest => dest.Attachments, opt => opt.Ignore())
             .ForMember(dest => dest.TaskGroup, opt => opt.Ignore());
+        CreateMap<TaskAttachment, TaskAttachmentResponseDto>();
 
         // TaskGroup mappings
         CreateMap<TaskGroup, TaskGroupResponseDto>();

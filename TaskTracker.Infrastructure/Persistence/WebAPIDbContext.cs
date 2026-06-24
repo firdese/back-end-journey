@@ -8,6 +8,7 @@ namespace TaskTracker.Infrastructure.Persistence
     {
         public DbSet<Task> Tasks { get; set; }
         public DbSet<TaskGroup> TaskGroups { get; set; }
+        public DbSet<TaskAttachment> TaskAttachments { get; set; }
 
         public WebAPIDbContext(DbContextOptions options) : base(options) { }
 
@@ -16,6 +17,7 @@ namespace TaskTracker.Infrastructure.Persistence
             modelBuilder.Entity<TaskTracker.Domain.Models.Task>().ToTable("tasks", "public");
             modelBuilder.Entity<TaskTracker.Domain.Models.TaskGroup>().ToTable("taskgroups", "public");
             modelBuilder.Entity<TaskTracker.Domain.Models.TaskDependency>().ToTable("taskdependencies", "public");
+            modelBuilder.Entity<TaskTracker.Domain.Models.TaskAttachment>().ToTable("taskattachments", "public");
 
             modelBuilder.Entity<Task>()
                 .HasOne(e => e.TaskGroup)
@@ -41,6 +43,12 @@ namespace TaskTracker.Infrastructure.Persistence
             modelBuilder.Entity<TaskDependency>()
                 .HasCheckConstraint("chk_no_self_dependency",
                     "\"TaskId\" <> \"DependsOnTaskId\"");
+
+            modelBuilder.Entity<TaskAttachment>()
+                .HasOne(attachment => attachment.Task)
+                .WithMany(task => task.Attachments)
+                .HasForeignKey(attachment => attachment.TaskId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             base.OnModelCreating(modelBuilder);
         }

@@ -1,3 +1,6 @@
+using Amazon;
+using Amazon.Runtime;
+using Amazon.S3;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -8,6 +11,7 @@ using TaskTracker.Application.Interfaces.Services;
 using TaskTracker.Application.Services;
 using TaskTracker.Infrastructure.Persistence;
 using TaskTracker.Infrastructure.Persistence.Repositories;
+using TaskTracker.Infrastructure.Storage;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,7 +37,52 @@ builder.Services.AddScoped<ITaskRepository, TaskRepository>();
 builder.Services.AddScoped<ITaskService, TaskService>();
 builder.Services.AddScoped<ITaskGroupRepository, TaskGroupRepository>();
 builder.Services.AddScoped<ITaskGroupService, TaskGroupService>();
+builder.Services.AddScoped<ITaskAttachmentRepository, TaskAttachmentRepository>();
+builder.Services.AddScoped<ITaskAttachmentService, TaskAttachmentService>();
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
+builder.Services.AddScoped<IObjectStorageService, S3ObjectStorageService>();
+builder.Services.AddSingleton(new S3StorageOptions
+{
+    BucketName = builder.Configuration.GetValue<string>("AWS:S3:BucketName") ?? string.Empty
+});
+builder.Services.AddSingleton<IAmazonS3>(_ =>
+{
+    var regionName = builder.Configuration.GetValue<string>("AWS:Region")
+                     ?? builder.Configuration.GetValue<string>("AWS_REGION")
+                     ?? "us-east-1";
+    var serviceUrl = builder.Configuration.GetValue<string>("AWS:ServiceUrl");
+    var accessKeyId = builder.Configuration.GetValue<string>("AWS:AccessKeyId")
+                      ?? builder.Configuration.GetValue<string>("AWS_ACCESS_KEY_ID");
+    var secretAccessKey = builder.Configuration.GetValue<string>("AWS:SecretAccessKey")
+                          ?? builder.Configuration.GetValue<string>("AWS_SECRET_ACCESS_KEY");
+    var config = new AmazonS3Config
+    {
+        RegionEndpoint = RegionEndpoint.GetBySystemName(regionName)
+    };
+
+    if (!string.IsNullOrWhiteSpace(serviceUrl))
+    {
+        config.ServiceURL = serviceUrl;
+        config.ForcePathStyle = true;
+    }
+
+    if (!string.IsNullOrWhiteSpace(accessKeyId) &&
+        !string.IsNullOrWhiteSpace(secretAccessKey))
+    {
+        return new AmazonS3Client(
+            new BasicAWSCredentials(accessKeyId, secretAccessKey),
+            config);
+    }
+
+    if (!string.IsNullOrWhiteSpace(serviceUrl))
+    {
+        return new AmazonS3Client(
+            new BasicAWSCredentials("test", "test"),
+            config);
+    }
+
+    return new AmazonS3Client(config);
+});
 
 builder.Services.AddHttpContextAccessor();
 
@@ -43,6 +92,7 @@ builder.Services.AddAutoMapper(_ => { }, typeof(TaskTracker.Application.Mapping.
 builder.Services.AddAuthentication("Bearer")
     .AddJwtBearer("Bearer", options => {
         options.Authority = builder.Configuration.GetValue<string>("Authentication:Authority");
+        options.RequireHttpsMetadata = builder.Configuration.GetValue("Authentication:RequireHttpsMetadata", true);
 
         options.TokenValidationParameters = new TokenValidationParameters {
             ValidIssuer = builder.Configuration.GetValue<string>("Authentication:ValidIssuer")
